@@ -2,16 +2,6 @@
   if (window.__jobApplicationTrackerLoaded) return;
   window.__jobApplicationTrackerLoaded = true;
 
-  const SUCCESS_WORDS = [
-    "投递成功", "申请成功", "简历已投递", "已成功投递", "申请已提交",
-    "application submitted", "application sent", "successfully applied",
-    "your application was sent", "thank you for applying"
-  ];
-  const JOB_WORDS = ["职位", "岗位", "招聘", "job", "career", "position", "vacancy"];
-  const CLOSED_STATUSES = ["已录用", "已拒绝", "主动放弃", "暂缓"];
-  let lastPromptKey = "";
-  let lastPromptAt = 0;
-
   const clean = (value) => (value || "").replace(/\s+/g, " ").trim();
   const firstText = (selectors) => {
     for (const selector of selectors) {
@@ -209,15 +199,7 @@
     return copy.toISOString().slice(0, 10);
   }
 
-  function pageLooksLikeJob() {
-    const haystack = `${location.href} ${document.title}`.toLowerCase();
-    return JOB_WORDS.some((word) => haystack.includes(word.toLowerCase())) ||
-      location.hostname.includes("zhipin.com") ||
-      location.hostname.includes("liepin.com") ||
-      location.hostname.includes("linkedin.com/jobs");
-  }
-
-  function showForm(detected = false) {
+  function showForm() {
     document.getElementById("jat-toast")?.remove();
     const data = extractJob();
     const box = document.createElement("div");
@@ -225,7 +207,7 @@
     box.innerHTML = `
       <div class="jat-head"><span>秋招投递助手</span><button class="jat-close" title="关闭">×</button></div>
       <div class="jat-body">
-        ${detected ? '<div class="jat-detected">✓ 检测到投递成功，请确认信息</div>' : ""}
+        <div class="jat-detected">请核对从当前页面提取的岗位信息</div>
         <label>公司名称</label><input data-field="company">
         <label>岗位名称</label><input data-field="jobTitle">
         <div class="jat-grid">
@@ -274,29 +256,8 @@
     };
   }
 
-  function detectSuccess() {
-    if (!pageLooksLikeJob()) return;
-    const bodyText = clean(document.body?.innerText).toLowerCase();
-    const matched = SUCCESS_WORDS.find((word) => bodyText.includes(word.toLowerCase()));
-    if (!matched) return;
-    const key = `${location.href}|${matched}`;
-    const now = Date.now();
-    if (key === lastPromptKey && now - lastPromptAt < 120000) return;
-    lastPromptKey = key;
-    lastPromptAt = now;
-    showForm(true);
-  }
-
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message?.type === "GET_JOB_INFO") sendResponse(extractJob());
-    if (message?.type === "OPEN_JOB_TRACKER") showForm(false);
+    if (message?.type === "OPEN_JOB_TRACKER") showForm();
   });
-
-  let timer;
-  const observer = new MutationObserver(() => {
-    clearTimeout(timer);
-    timer = setTimeout(detectSuccess, 700);
-  });
-  if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-  setTimeout(detectSuccess, 1200);
 })();
