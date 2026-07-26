@@ -184,6 +184,8 @@
       priority: "中",
       nextAction: "跟进投递结果",
       nextDate: addDays(new Date(), 3),
+      resumeVersion: "",
+      assessmentStatus: "待确认",
       notes: [
         generic.employmentType ? `用工类型：${generic.employmentType}` : "",
         generic.description ? `职位描述：${generic.description}` : "",
@@ -238,6 +240,12 @@
         <div class="jat-grid">
           <div><label>投递日期</label><input type="date" data-field="appliedDate"></div>
           <div><label>下次跟进</label><input type="date" data-field="nextDate"></div>
+        </div>
+        <div class="jat-grid">
+          <div><label>投递简历版本</label><input data-field="resumeVersion" placeholder="例如：海外销售版 v3"></div>
+          <div><label>笔试/测评状态</label><select data-field="assessmentStatus">
+            <option>待确认</option><option>无</option><option>待完成</option><option>已完成</option>
+          </select></div>
         </div>
         <label>职位描述与要求（自动提取，可修改）</label>
         <textarea data-field="notes" rows="4"></textarea>

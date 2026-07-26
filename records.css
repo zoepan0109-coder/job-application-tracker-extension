@@ -7,7 +7,7 @@ body > header .actions { flex: 0 0 auto; white-space: nowrap; }
 h1 { margin: 0; font-size: 24px; } header p { margin: 5px 0 0; color: #d9eaf7; }
 button { border: 0; border-radius: 8px; padding: 10px 15px; background: #fff; color: #17365d; font-weight: 700; cursor: pointer; }
 button.danger { background: #8f2630; color: #fff; margin-left: 8px; }
-.stats { display: grid; grid-template-columns: repeat(5, minmax(130px, 1fr)); gap: 12px; margin: 22px 30px 12px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); gap: 12px; margin: 22px 30px 12px; }
 .card { background: #fff; border: 1px solid #dce6ef; border-radius: 12px; padding: 15px; }
 .card span { color: #64748b; font-size: 13px; }.card strong { display: block; color: #17365d; margin-top: 5px; font-size: 24px; }
 .toolbar { display: flex; gap: 12px; margin: 0 30px 12px; }

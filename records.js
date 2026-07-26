@@ -1,4 +1,5 @@
 const statuses = ["已投递","笔试/测评","HR面","业务面","终面","Offer沟通","已录用","已拒绝","主动放弃","暂缓"];
+const assessmentStatuses = ["待确认","无","待完成","已完成"];
 const projectSignature = "JAT-ZP-2026";
 const defaultDirections = [
   "海外To B销售","国际业务开发","客户开发","产品经理","数据分析","运营",
@@ -38,7 +39,9 @@ function renderStats() {
   const overdue = applications.filter((x) => x.nextDate && x.nextDate < new Date().toISOString().slice(0,10) && !["已录用","已拒绝","主动放弃","暂缓"].includes(x.status)).length;
   document.getElementById("stats").innerHTML = [
     ["总投递", applications.length], ["进行中", active], ["面试阶段", interviewing],
-    ["Offer/录用", applications.filter((x) => ["Offer沟通","已录用"].includes(x.status)).length], ["逾期待办", overdue]
+    ["Offer/录用", applications.filter((x) => ["Offer沟通","已录用"].includes(x.status)).length],
+    ["待完成笔试", applications.filter((x) => x.assessmentStatus === "待完成").length],
+    ["逾期待办", overdue]
   ].map(([label, value]) => `<div class="card"><span>${label}</span><strong>${value}</strong></div>`).join("");
 }
 function render() {
@@ -51,11 +54,13 @@ function render() {
   document.getElementById("rows").innerHTML = filtered.length ? filtered.map((x) => `<tr data-id="${x.id}">
     <td><a href="${esc(x.url)}" target="_blank" rel="noreferrer">${esc(x.company)}</a></td>
     <td>${esc(x.jobTitle)}</td><td>${esc(x.direction)}</td><td>${esc(x.location)}</td><td>${esc(x.appliedDate)}</td>
+    <td><input data-field="resumeVersion" value="${esc(x.resumeVersion)}" placeholder="随手记录版本"></td>
+    <td><select data-field="assessmentStatus">${assessmentStatuses.map((v) => `<option ${v === (x.assessmentStatus || "待确认") ? "selected" : ""}>${v}</option>`).join("")}</select></td>
     <td><select data-field="status">${statuses.map((v) => `<option ${v === x.status ? "selected" : ""}>${v}</option>`).join("")}</select></td>
     <td><input data-field="nextAction" value="${esc(x.nextAction)}"></td>
     <td><input type="date" data-field="nextDate" value="${esc(x.nextDate)}"></td>
     <td>${esc(x.source)}</td><td title="${esc(x.notes)}">${x.notes ? "已采集" : "—"}</td><td><button class="delete">删除</button></td>
-  </tr>`).join("") : `<tr><td colspan="11" class="empty">还没有投递记录</td></tr>`;
+  </tr>`).join("") : `<tr><td colspan="13" class="empty">还没有投递记录</td></tr>`;
 }
 async function save() { await storage.set({ applications }); }
 async function saveAll() { await storage.set({ applications, directionOptions }); }
@@ -99,7 +104,7 @@ document.getElementById("saveDirections").addEventListener("click", async (event
   directionDialog.close();
 });
 document.getElementById("export").addEventListener("click", () => {
-  const headers = ["序号","公司名称","岗位名称","岗位方向","工作地点","优先级","投递渠道","投递日期","当前流程","最近进展日期","下一步安排","下一步日期","提醒状态","等待天数","联系人/联系方式","岗位链接","备注","生成工具"];
+  const headers = ["序号","公司名称","岗位名称","岗位方向","工作地点","优先级","投递渠道","投递日期","投递简历版本","笔试/测评状态","当前流程","最近进展日期","下一步安排","下一步日期","提醒状态","等待天数","联系人/联系方式","岗位链接","备注","生成工具"];
   const today = new Date().toISOString().slice(0,10);
   const quote = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const rows = applications.map((x, i) => {
@@ -107,7 +112,7 @@ document.getElementById("export").addEventListener("click", () => {
     const reminder = closed ? "已结束" : !x.nextDate ? "待安排" : x.nextDate < today ? "已逾期" : x.nextDate === today ? "今日" : "待办";
     const last = x.lastProgressDate || x.appliedDate;
     const wait = last ? Math.max(0, Math.floor((new Date(today) - new Date(last)) / 86400000)) : "";
-    return [i+1,x.company,x.jobTitle,x.direction,x.location,x.priority,x.source,x.appliedDate,x.status,last,x.nextAction,x.nextDate,reminder,wait,x.contact,x.url,x.notes,x.projectSignature || projectSignature].map(quote).join(",");
+    return [i+1,x.company,x.jobTitle,x.direction,x.location,x.priority,x.source,x.appliedDate,x.resumeVersion,x.assessmentStatus || "待确认",x.status,last,x.nextAction,x.nextDate,reminder,wait,x.contact,x.url,x.notes,x.projectSignature || projectSignature].map(quote).join(",");
   });
   const csv = "\ufeff" + [headers.map(quote).join(","), ...rows].join("\r\n");
   const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));

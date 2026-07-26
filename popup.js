@@ -1,16 +1,21 @@
 const statuses = ["已投递","笔试/测评","HR面","业务面","终面","Offer沟通","已录用","已拒绝","主动放弃","暂缓"];
+const assessmentStatuses = ["待确认","无","待完成","已完成"];
 const projectSignature = "JAT-ZP-2026";
 const defaultDirections = [
   "海外To B销售","国际业务开发","客户开发","产品经理","数据分析","运营",
   "市场营销","大宗商品业务","贸易运营","产业研究","其他"
 ];
-const fields = ["company","jobTitle","location","status","direction","priority","appliedDate","nextDate","nextAction","notes"];
+const fields = [
+  "company","jobTitle","location","status","direction","priority","appliedDate",
+  "nextDate","resumeVersion","assessmentStatus","nextAction","notes"
+];
 let pageInfo = {};
 
 const fillOptions = (id, items) => {
   document.getElementById(id).innerHTML = items.map((item) => `<option>${item}</option>`).join("");
 };
 fillOptions("status", statuses);
+fillOptions("assessmentStatus", assessmentStatuses);
 
 const addDays = (days) => {
   const date = new Date();
