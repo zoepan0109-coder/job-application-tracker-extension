@@ -14,3 +14,6 @@ textarea { height: 78px; padding: 8px 9px; resize: vertical; line-height: 1.45; 
 button { flex: 1; height: 38px; border: 0; border-radius: 8px; background: #2f75b5; color: #fff; font-weight: 700; cursor: pointer; }
 button.secondary { background: #e6eef5; color: #17365d; }
 #message { min-height: 16px; margin: 9px 0 0; text-align: center; color: #375623; font-size: 12px; }
+footer { margin-top: 3px; text-align: center; }
+footer a { color: #9aa7b4; font-size: 10px; text-decoration: none; }
+footer a:hover { color: #52606d; text-decoration: underline; }

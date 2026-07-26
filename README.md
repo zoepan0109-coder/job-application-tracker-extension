@@ -9,7 +9,7 @@
 - 本地管理流程、下一步安排和跟进日期
 - 导出与“2026 秋招投递进度计划表”字段一致的 CSV
 
-当前版本：`0.4.0`
+当前版本：`0.4.1`
 
 ## 支持的网站
 
@@ -194,6 +194,21 @@ CSV 是独立备份文件，不会与浏览器中的记录自动双向同步。�
 记录保存在浏览器本地的扩展存储中，不会上传到服务器。清除浏览器扩展数据或卸载扩展前，请先导出备份。
 
 扩展需要读取招聘页面内容以识别岗位信息，但不会收集密码、Cookie、浏览历史或简历文件。
+
+## 作者、来源标识与许可
+
+- 作者：[`zoepan0109-coder`](https://github.com/zoepan0109-coder)
+- 项目主页：[`job-application-tracker-extension`](https://github.com/zoepan0109-coder/job-application-tracker-extension)
+- 固定项目签名：`JAT-ZP-2026`
+- 许可： [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0)
+
+项目签名会出现在扩展界面、源代码标识和导出 CSV 的“生成工具”字段中。
+它仅用于证明软件来源，不生成用户专属编号、不识别设备，也不会联网发送数据。
+
+本项目允许个人学习及非商业使用、修改和分发，但再分发时必须保留许可证链接及
+`Required Notice`。商业使用不在该许可范围内，如需商业授权，请通过 GitHub 联系作者。
+
+本项目是采用非商业许可的 source-available 软件，不属于 OSI 定义的开源软件。
 
 ## 已知限制
 

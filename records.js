@@ -1,4 +1,5 @@
 const statuses = ["已投递","笔试/测评","HR面","业务面","终面","Offer沟通","已录用","已拒绝","主动放弃","暂缓"];
+const projectSignature = "JAT-ZP-2026";
 const defaultDirections = [
   "海外To B销售","国际业务开发","客户开发","产品经理","数据分析","运营",
   "市场营销","大宗商品业务","贸易运营","产业研究","其他"
@@ -98,7 +99,7 @@ document.getElementById("saveDirections").addEventListener("click", async (event
   directionDialog.close();
 });
 document.getElementById("export").addEventListener("click", () => {
-  const headers = ["序号","公司名称","岗位名称","岗位方向","工作地点","优先级","投递渠道","投递日期","当前流程","最近进展日期","下一步安排","下一步日期","提醒状态","等待天数","联系人/联系方式","岗位链接","备注"];
+  const headers = ["序号","公司名称","岗位名称","岗位方向","工作地点","优先级","投递渠道","投递日期","当前流程","最近进展日期","下一步安排","下一步日期","提醒状态","等待天数","联系人/联系方式","岗位链接","备注","生成工具"];
   const today = new Date().toISOString().slice(0,10);
   const quote = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const rows = applications.map((x, i) => {
@@ -106,7 +107,7 @@ document.getElementById("export").addEventListener("click", () => {
     const reminder = closed ? "已结束" : !x.nextDate ? "待安排" : x.nextDate < today ? "已逾期" : x.nextDate === today ? "今日" : "待办";
     const last = x.lastProgressDate || x.appliedDate;
     const wait = last ? Math.max(0, Math.floor((new Date(today) - new Date(last)) / 86400000)) : "";
-    return [i+1,x.company,x.jobTitle,x.direction,x.location,x.priority,x.source,x.appliedDate,x.status,last,x.nextAction,x.nextDate,reminder,wait,x.contact,x.url,x.notes].map(quote).join(",");
+    return [i+1,x.company,x.jobTitle,x.direction,x.location,x.priority,x.source,x.appliedDate,x.status,last,x.nextAction,x.nextDate,reminder,wait,x.contact,x.url,x.notes,x.projectSignature || projectSignature].map(quote).join(",");
   });
   const csv = "\ufeff" + [headers.map(quote).join(","), ...rows].join("\r\n");
   const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));

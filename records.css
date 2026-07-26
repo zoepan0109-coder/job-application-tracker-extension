@@ -32,6 +32,9 @@ dialog textarea { width: 100%; border: 1px solid #cad6e2; border-radius: 8px; pa
 .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 14px; }
 .dialog-actions button { flex: 0 0 auto; }
 .dialog-actions .secondary { background: #e6eef5; color: #17365d; }
+.project-footer { margin: -14px 30px 24px; text-align: right; }
+.project-footer a { color: #9aa7b4; font-size: 10px; text-decoration: none; }
+.project-footer a:hover { color: #52606d; text-decoration: underline; }
 @media (max-width: 900px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
   body > header { align-items: flex-start; }

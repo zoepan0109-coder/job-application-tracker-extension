@@ -2,6 +2,7 @@
   if (window.__jobApplicationTrackerLoaded) return;
   window.__jobApplicationTrackerLoaded = true;
 
+  const PROJECT_SIGNATURE = "JAT-ZP-2026";
   const DEFAULT_DIRECTIONS = [
     "海外To B销售", "国际业务开发", "客户开发", "产品经理",
     "数据分析", "运营", "市场营销", "大宗商品业务", "贸易运营",
@@ -253,7 +254,12 @@
     box.querySelector(".jat-close").onclick = () => box.remove();
     box.querySelector('[data-action="records"]').onclick = () => chrome.runtime.sendMessage({ type: "OPEN_RECORDS" });
     box.querySelector('[data-action="save"]').onclick = async () => {
-      const record = { ...data, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+      const record = {
+        ...data,
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+        projectSignature: PROJECT_SIGNATURE
+      };
       box.querySelectorAll("[data-field]").forEach((el) => { record[el.dataset.field] = clean(el.value); });
       const stored = await chrome.storage.local.get({ applications: [] });
       const duplicate = stored.applications.find((item) =>

@@ -1,4 +1,5 @@
 const statuses = ["已投递","笔试/测评","HR面","业务面","终面","Offer沟通","已录用","已拒绝","主动放弃","暂缓"];
+const projectSignature = "JAT-ZP-2026";
 const defaultDirections = [
   "海外To B销售","国际业务开发","客户开发","产品经理","数据分析","运营",
   "市场营销","大宗商品业务","贸易运营","产业研究","其他"
@@ -45,7 +46,12 @@ async function load() {
 }
 
 document.getElementById("save").addEventListener("click", async () => {
-  const record = { ...pageInfo, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+  const record = {
+    ...pageInfo,
+    id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
+    projectSignature
+  };
   fields.forEach((field) => { record[field] = document.getElementById(field).value.trim(); });
   if (!record.company || !record.jobTitle) {
     document.getElementById("message").textContent = "请填写公司名称和岗位名称";

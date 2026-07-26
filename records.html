@@ -3,10 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="author" content="zoepan0109-coder">
+  <meta name="project-signature" content="JAT-ZP-2026">
   <title>秋招投递记录</title>
   <link rel="stylesheet" href="records.css">
 </head>
-<body>
+<body data-project-signature="JAT-ZP-2026">
   <header>
     <div><h1>秋招投递进度</h1><p>数据仅保存在当前浏览器中，可导出为 Excel 可打开的 CSV。</p></div>
     <div class="actions"><button id="export">导出 CSV</button><button id="clear" class="danger">清空全部</button></div>
@@ -21,6 +23,11 @@
     <th>公司</th><th>岗位</th><th>方向</th><th>地点</th><th>投递日期</th>
     <th>当前流程</th><th>下一步</th><th>跟进日期</th><th>渠道</th><th>JD详情</th><th>操作</th>
   </tr></thead><tbody id="rows"></tbody></table></main>
+  <footer class="project-footer">
+    <a href="https://github.com/zoepan0109-coder/job-application-tracker-extension" target="_blank" rel="noreferrer">
+      JAT-ZP-2026 · Copyright 2026 zoepan0109-coder
+    </a>
+  </footer>
   <dialog id="directionDialog">
     <form method="dialog">
       <h2>自定义岗位方向</h2>
