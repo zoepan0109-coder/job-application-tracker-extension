@@ -1,5 +1,8 @@
 const statuses = ["已投递","笔试/测评","HR面","业务面","终面","Offer沟通","已录用","已拒绝","主动放弃","暂缓"];
-const directions = ["海外To B销售","国际业务开发","客户开发","大宗商品业务","贸易运营","产业研究","其他"];
+const defaultDirections = [
+  "海外To B销售","国际业务开发","客户开发","产品经理","数据分析","运营",
+  "市场营销","大宗商品业务","贸易运营","产业研究","其他"
+];
 const fields = ["company","jobTitle","location","status","direction","priority","appliedDate","nextDate","nextAction","notes"];
 let pageInfo = {};
 
@@ -7,7 +10,6 @@ const fillOptions = (id, items) => {
   document.getElementById(id).innerHTML = items.map((item) => `<option>${item}</option>`).join("");
 };
 fillOptions("status", statuses);
-fillOptions("direction", directions);
 
 const addDays = (days) => {
   const date = new Date();
@@ -18,8 +20,18 @@ document.getElementById("appliedDate").value = new Date().toISOString().slice(0,
 document.getElementById("nextDate").value = addDays(3);
 
 async function load() {
-  const stored = await chrome.storage.local.get({ applications: [] });
+  const stored = await chrome.storage.local.get({
+    applications: [],
+    directionOptions: defaultDirections
+  });
   document.getElementById("count").textContent = `${stored.applications.length} 条`;
+  const directions = stored.directionOptions?.length ? stored.directionOptions : defaultDirections;
+  const directionList = document.getElementById("directionOptions");
+  directionList.replaceChildren(...directions.map((item) => {
+    const option = document.createElement("option");
+    option.value = item;
+    return option;
+  }));
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   document.getElementById("source").textContent = tab?.title || "当前页面";
   try {

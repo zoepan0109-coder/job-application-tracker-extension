@@ -2,7 +2,15 @@
   if (window.__jobApplicationTrackerLoaded) return;
   window.__jobApplicationTrackerLoaded = true;
 
+  const DEFAULT_DIRECTIONS = [
+    "海外To B销售", "国际业务开发", "客户开发", "产品经理",
+    "数据分析", "运营", "市场营销", "大宗商品业务", "贸易运营",
+    "产业研究", "其他"
+  ];
   const clean = (value) => (value || "").replace(/\s+/g, " ").trim();
+  const escapeAttr = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[char]));
   const firstText = (selectors) => {
     for (const selector of selectors) {
       const node = document.querySelector(selector);
@@ -199,9 +207,12 @@
     return copy.toISOString().slice(0, 10);
   }
 
-  function showForm() {
+  async function showForm() {
     document.getElementById("jat-toast")?.remove();
     const data = extractJob();
+    const storedSettings = await chrome.storage.local.get({ directionOptions: DEFAULT_DIRECTIONS });
+    const directionOptions = storedSettings.directionOptions?.length
+      ? storedSettings.directionOptions : DEFAULT_DIRECTIONS;
     const box = document.createElement("div");
     box.id = "jat-toast";
     box.innerHTML = `
@@ -217,9 +228,10 @@
           </select></div>
         </div>
         <div class="jat-grid">
-          <div><label>岗位方向</label><select data-field="direction">
-            ${["海外To B销售","国际业务开发","客户开发","大宗商品业务","贸易运营","产业研究","其他"].map(v => `<option>${v}</option>`).join("")}
-          </select></div>
+          <div><label>岗位方向</label>
+            <input data-field="direction" list="jat-direction-options" placeholder="可直接输入自定义方向">
+            <datalist id="jat-direction-options">${directionOptions.map(v => `<option value="${escapeAttr(v)}"></option>`).join("")}</datalist>
+          </div>
           <div><label>优先级</label><select data-field="priority"><option>高</option><option>中</option><option>低</option></select></div>
         </div>
         <div class="jat-grid">

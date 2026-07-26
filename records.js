@@ -1,18 +1,34 @@
 const statuses = ["已投递","笔试/测评","HR面","业务面","终面","Offer沟通","已录用","已拒绝","主动放弃","暂缓"];
+const defaultDirections = [
+  "海外To B销售","国际业务开发","客户开发","产品经理","数据分析","运营",
+  "市场营销","大宗商品业务","贸易运营","产业研究","其他"
+];
 let applications = [];
+let directionOptions = [];
 const esc = (value) => String(value || "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const storage = globalThis.chrome?.storage?.local ? {
   get: (defaults) => chrome.storage.local.get(defaults),
   set: (value) => chrome.storage.local.set(value)
 } : {
-  get: async (defaults) => ({ ...defaults, applications: JSON.parse(localStorage.getItem("applications") || "[]") }),
-  set: async (value) => localStorage.setItem("applications", JSON.stringify(value.applications || []))
+  get: async (defaults) => ({
+    ...defaults,
+    applications: JSON.parse(localStorage.getItem("applications") || "[]"),
+    directionOptions: JSON.parse(localStorage.getItem("directionOptions") || "null") || defaults.directionOptions
+  }),
+  set: async (value) => {
+    if (value.applications) localStorage.setItem("applications", JSON.stringify(value.applications));
+    if (value.directionOptions) localStorage.setItem("directionOptions", JSON.stringify(value.directionOptions));
+  }
 };
 
 document.getElementById("filter").innerHTML += statuses.map((v) => `<option>${v}</option>`).join("");
 
 async function load() {
-  ({ applications = [] } = await storage.get({ applications: [] }));
+  ({ applications = [], directionOptions = defaultDirections } = await storage.get({
+    applications: [],
+    directionOptions: defaultDirections
+  }));
+  if (!directionOptions.length) directionOptions = [...defaultDirections];
   render();
 }
 function renderStats() {
@@ -41,6 +57,7 @@ function render() {
   </tr>`).join("") : `<tr><td colspan="11" class="empty">还没有投递记录</td></tr>`;
 }
 async function save() { await storage.set({ applications }); }
+async function saveAll() { await storage.set({ applications, directionOptions }); }
 document.getElementById("rows").addEventListener("change", async (event) => {
   const row = event.target.closest("tr[data-id]");
   if (!row || !event.target.dataset.field) return;
@@ -59,6 +76,26 @@ document.getElementById("filter").addEventListener("change", render);
 document.getElementById("clear").addEventListener("click", async () => {
   if (!confirm("确定清空所有投递记录吗？此操作无法撤销。")) return;
   applications = []; await save(); render();
+});
+const directionDialog = document.getElementById("directionDialog");
+document.getElementById("directionSettings").addEventListener("click", () => {
+  document.getElementById("directionEditor").value = directionOptions.join("\n");
+  directionDialog.showModal();
+});
+document.getElementById("restoreDirections").addEventListener("click", (event) => {
+  event.preventDefault();
+  document.getElementById("directionEditor").value = defaultDirections.join("\n");
+});
+document.getElementById("saveDirections").addEventListener("click", async (event) => {
+  event.preventDefault();
+  const values = document.getElementById("directionEditor").value
+    .split(/\n|,|，/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+  directionOptions = [...new Set(values)];
+  if (!directionOptions.length) directionOptions = [...defaultDirections];
+  await saveAll();
+  directionDialog.close();
 });
 document.getElementById("export").addEventListener("click", () => {
   const headers = ["序号","公司名称","岗位名称","岗位方向","工作地点","优先级","投递渠道","投递日期","当前流程","最近进展日期","下一步安排","下一步日期","提醒状态","等待天数","联系人/联系方式","岗位链接","备注"];

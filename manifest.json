@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "秋招投递助手",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "手动从 Boss直聘、猎聘、LinkedIn 和公司招聘页面提取岗位信息，并记录秋招进度。",
   "permissions": ["storage", "activeTab", "downloads", "contextMenus"],
   "host_permissions": ["<all_urls>"],

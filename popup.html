@@ -16,7 +16,10 @@
       <label>当前流程<select id="status"></select></label>
     </div>
     <div class="grid">
-      <label>岗位方向<select id="direction"></select></label>
+      <label>岗位方向
+        <input id="direction" list="directionOptions" placeholder="可直接输入自定义方向">
+        <datalist id="directionOptions"></datalist>
+      </label>
       <label>优先级<select id="priority"><option>高</option><option selected>中</option><option>低</option></select></label>
     </div>
     <div class="grid">

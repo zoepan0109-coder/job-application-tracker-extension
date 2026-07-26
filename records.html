@@ -15,11 +15,24 @@
   <section class="toolbar">
     <input id="search" placeholder="搜索公司或岗位">
     <select id="filter"><option value="">全部流程</option></select>
+    <button id="directionSettings" class="settings-button">岗位方向设置</button>
   </section>
   <main><table><thead><tr>
     <th>公司</th><th>岗位</th><th>方向</th><th>地点</th><th>投递日期</th>
     <th>当前流程</th><th>下一步</th><th>跟进日期</th><th>渠道</th><th>JD详情</th><th>操作</th>
   </tr></thead><tbody id="rows"></tbody></table></main>
+  <dialog id="directionDialog">
+    <form method="dialog">
+      <h2>自定义岗位方向</h2>
+      <p>每行填写一个方向。保存岗位时仍可临时输入列表外的内容。</p>
+      <textarea id="directionEditor" rows="12"></textarea>
+      <div class="dialog-actions">
+        <button value="cancel" class="secondary">取消</button>
+        <button value="default" id="restoreDirections" class="secondary">恢复默认</button>
+        <button value="save" id="saveDirections">保存设置</button>
+      </div>
+    </form>
+  </dialog>
   <script src="records.js"></script>
 </body>
 </html>
