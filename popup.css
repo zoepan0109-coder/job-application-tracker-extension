@@ -1,0 +1,16 @@
+:root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; color: #1f2937; }
+* { box-sizing: border-box; }
+body { margin: 0; width: 380px; background: #f5f8fb; }
+main { padding: 16px; }
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+h1 { margin: 0; color: #17365d; font-size: 20px; }
+header p { margin: 4px 0 0; color: #6b7280; font-size: 12px; max-width: 270px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#count { border-radius: 99px; background: #d9eaf7; color: #17365d; padding: 4px 8px; font-size: 12px; }
+label { display: block; margin-top: 9px; color: #52606d; font-size: 12px; }
+input, select, textarea { width: 100%; height: 36px; margin-top: 4px; border: 1px solid #cad6e2; border-radius: 7px; background: #fff; padding: 0 9px; color: #1f2937; }
+textarea { height: 78px; padding: 8px 9px; resize: vertical; line-height: 1.45; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.actions { display: flex; gap: 10px; margin-top: 15px; }
+button { flex: 1; height: 38px; border: 0; border-radius: 8px; background: #2f75b5; color: #fff; font-weight: 700; cursor: pointer; }
+button.secondary { background: #e6eef5; color: #17365d; }
+#message { min-height: 16px; margin: 9px 0 0; text-align: center; color: #375623; font-size: 12px; }

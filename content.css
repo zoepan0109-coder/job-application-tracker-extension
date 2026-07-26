@@ -1,0 +1,36 @@
+#jat-toast {
+  all: initial;
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 2147483647;
+  width: 350px;
+  box-sizing: border-box;
+  border: 1px solid #c8d8e8;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(17, 42, 70, .22);
+  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  overflow: hidden;
+}
+#jat-toast * { box-sizing: border-box; font-family: inherit; }
+#jat-toast .jat-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 15px; background: #17365d; color: #fff; font-weight: 700; font-size: 15px;
+}
+#jat-toast .jat-close { border: 0; background: transparent; color: #fff; cursor: pointer; font-size: 20px; }
+#jat-toast .jat-body { padding: 14px 15px; font-size: 13px; line-height: 1.55; }
+#jat-toast .jat-detected { margin-bottom: 10px; color: #375623; font-weight: 600; }
+#jat-toast label { display: block; margin: 8px 0 3px; color: #52606d; font-size: 12px; }
+#jat-toast input, #jat-toast select, #jat-toast textarea {
+  width: 100%; height: 34px; border: 1px solid #ccd6e0; border-radius: 7px;
+  padding: 0 9px; background: #fff; color: #1f2937; font-size: 13px;
+}
+#jat-toast textarea { height: 82px; padding: 8px 9px; resize: vertical; line-height: 1.45; }
+#jat-toast .jat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#jat-toast .jat-actions { display: flex; gap: 8px; margin-top: 13px; }
+#jat-toast .jat-btn { flex: 1; height: 36px; border: 0; border-radius: 8px; cursor: pointer; font-size: 13px; }
+#jat-toast .jat-primary { background: #2f75b5; color: #fff; font-weight: 700; }
+#jat-toast .jat-secondary { background: #edf3f8; color: #17365d; }
+#jat-toast .jat-success { padding: 20px 15px; text-align: center; color: #375623; font-weight: 700; }

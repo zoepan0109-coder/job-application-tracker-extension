@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>秋招投递助手</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header><div><h1>秋招投递助手</h1><p id="source">正在读取当前页面…</p></div><span id="count">0 条</span></header>
+    <label>公司名称<input id="company"></label>
+    <label>岗位名称<input id="jobTitle"></label>
+    <div class="grid">
+      <label>工作地点<input id="location"></label>
+      <label>当前流程<select id="status"></select></label>
+    </div>
+    <div class="grid">
+      <label>岗位方向<select id="direction"></select></label>
+      <label>优先级<select id="priority"><option>高</option><option selected>中</option><option>低</option></select></label>
+    </div>
+    <div class="grid">
+      <label>投递日期<input type="date" id="appliedDate"></label>
+      <label>下次跟进<input type="date" id="nextDate"></label>
+    </div>
+    <label>下一步安排<input id="nextAction" value="跟进投递结果"></label>
+    <label>职位描述与要求<textarea id="notes" rows="4" placeholder="自动提取职位描述和任职要求"></textarea></label>
+    <div class="actions"><button id="records" class="secondary">管理记录</button><button id="save">保存投递</button></div>
+    <p id="message"></p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

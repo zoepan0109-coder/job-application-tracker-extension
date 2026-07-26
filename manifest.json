@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "秋招投递助手",
+  "version": "0.2.0",
+  "description": "从 Boss直聘、猎聘、LinkedIn 和公司招聘页面提取岗位信息，并记录秋招进度。",
+  "permissions": ["storage", "activeTab", "downloads", "contextMenus"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "记录本页岗位",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "records.html",
+    "open_in_tab": true
+  }
+}

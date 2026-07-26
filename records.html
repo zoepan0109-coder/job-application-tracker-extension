@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>秋招投递记录</title>
+  <link rel="stylesheet" href="records.css">
+</head>
+<body>
+  <header>
+    <div><h1>秋招投递进度</h1><p>数据仅保存在当前浏览器中，可导出为 Excel 可打开的 CSV。</p></div>
+    <div class="actions"><button id="export">导出 CSV</button><button id="clear" class="danger">清空全部</button></div>
+  </header>
+  <section class="stats" id="stats"></section>
+  <section class="toolbar">
+    <input id="search" placeholder="搜索公司或岗位">
+    <select id="filter"><option value="">全部流程</option></select>
+  </section>
+  <main><table><thead><tr>
+    <th>公司</th><th>岗位</th><th>方向</th><th>地点</th><th>投递日期</th>
+    <th>当前流程</th><th>下一步</th><th>跟进日期</th><th>渠道</th><th>JD详情</th><th>操作</th>
+  </tr></thead><tbody id="rows"></tbody></table></main>
+  <script src="records.js"></script>
+</body>
+</html>
