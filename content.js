@@ -2,17 +2,16 @@
   if (window.__jobApplicationTrackerLoaded) return;
   window.__jobApplicationTrackerLoaded = true;
 
-  const SUCCESS_WORDS = [
-    "投递成功", "申请成功", "简历已投递", "已成功投递", "申请已提交",
-    "application submitted", "application sent", "successfully applied",
-    "your application was sent", "thank you for applying"
+  const PROJECT_SIGNATURE = "JAT-ZP-2026";
+  const DEFAULT_DIRECTIONS = [
+    "海外To B销售", "国际业务开发", "客户开发", "产品经理",
+    "数据分析", "运营", "市场营销", "大宗商品业务", "贸易运营",
+    "产业研究", "其他"
   ];
-  const JOB_WORDS = ["职位", "岗位", "招聘", "job", "career", "position", "vacancy"];
-  const CLOSED_STATUSES = ["已录用", "已拒绝", "主动放弃", "暂缓"];
-  let lastPromptKey = "";
-  let lastPromptAt = 0;
-
   const clean = (value) => (value || "").replace(/\s+/g, " ").trim();
+  const escapeAttr = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[char]));
   const firstText = (selectors) => {
     for (const selector of selectors) {
       const node = document.querySelector(selector);
@@ -185,6 +184,8 @@
       priority: "中",
       nextAction: "跟进投递结果",
       nextDate: addDays(new Date(), 3),
+      resumeVersion: "",
+      assessmentStatus: "待确认",
       notes: [
         generic.employmentType ? `用工类型：${generic.employmentType}` : "",
         generic.description ? `职位描述：${generic.description}` : "",
@@ -209,23 +210,18 @@
     return copy.toISOString().slice(0, 10);
   }
 
-  function pageLooksLikeJob() {
-    const haystack = `${location.href} ${document.title}`.toLowerCase();
-    return JOB_WORDS.some((word) => haystack.includes(word.toLowerCase())) ||
-      location.hostname.includes("zhipin.com") ||
-      location.hostname.includes("liepin.com") ||
-      location.hostname.includes("linkedin.com/jobs");
-  }
-
-  function showForm(detected = false) {
+  async function showForm() {
     document.getElementById("jat-toast")?.remove();
     const data = extractJob();
+    const storedSettings = await chrome.storage.local.get({ directionOptions: DEFAULT_DIRECTIONS });
+    const directionOptions = storedSettings.directionOptions?.length
+      ? storedSettings.directionOptions : DEFAULT_DIRECTIONS;
     const box = document.createElement("div");
     box.id = "jat-toast";
     box.innerHTML = `
       <div class="jat-head"><span>秋招投递助手</span><button class="jat-close" title="关闭">×</button></div>
       <div class="jat-body">
-        ${detected ? '<div class="jat-detected">✓ 检测到投递成功，请确认信息</div>' : ""}
+        <div class="jat-detected">请核对从当前页面提取的岗位信息</div>
         <label>公司名称</label><input data-field="company">
         <label>岗位名称</label><input data-field="jobTitle">
         <div class="jat-grid">
@@ -235,14 +231,21 @@
           </select></div>
         </div>
         <div class="jat-grid">
-          <div><label>岗位方向</label><select data-field="direction">
-            ${["海外To B销售","国际业务开发","客户开发","大宗商品业务","贸易运营","产业研究","其他"].map(v => `<option>${v}</option>`).join("")}
-          </select></div>
+          <div><label>岗位方向</label>
+            <input data-field="direction" list="jat-direction-options" placeholder="可直接输入自定义方向">
+            <datalist id="jat-direction-options">${directionOptions.map(v => `<option value="${escapeAttr(v)}"></option>`).join("")}</datalist>
+          </div>
           <div><label>优先级</label><select data-field="priority"><option>高</option><option>中</option><option>低</option></select></div>
         </div>
         <div class="jat-grid">
           <div><label>投递日期</label><input type="date" data-field="appliedDate"></div>
           <div><label>下次跟进</label><input type="date" data-field="nextDate"></div>
+        </div>
+        <div class="jat-grid">
+          <div><label>投递简历版本</label><input data-field="resumeVersion" placeholder="例如：海外销售版 v3"></div>
+          <div><label>笔试/测评状态</label><select data-field="assessmentStatus">
+            <option>待确认</option><option>无</option><option>待完成</option><option>已完成</option>
+          </select></div>
         </div>
         <label>职位描述与要求（自动提取，可修改）</label>
         <textarea data-field="notes" rows="4"></textarea>
@@ -259,7 +262,12 @@
     box.querySelector(".jat-close").onclick = () => box.remove();
     box.querySelector('[data-action="records"]').onclick = () => chrome.runtime.sendMessage({ type: "OPEN_RECORDS" });
     box.querySelector('[data-action="save"]').onclick = async () => {
-      const record = { ...data, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+      const record = {
+        ...data,
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+        projectSignature: PROJECT_SIGNATURE
+      };
       box.querySelectorAll("[data-field]").forEach((el) => { record[el.dataset.field] = clean(el.value); });
       const stored = await chrome.storage.local.get({ applications: [] });
       const duplicate = stored.applications.find((item) =>
@@ -274,29 +282,8 @@
     };
   }
 
-  function detectSuccess() {
-    if (!pageLooksLikeJob()) return;
-    const bodyText = clean(document.body?.innerText).toLowerCase();
-    const matched = SUCCESS_WORDS.find((word) => bodyText.includes(word.toLowerCase()));
-    if (!matched) return;
-    const key = `${location.href}|${matched}`;
-    const now = Date.now();
-    if (key === lastPromptKey && now - lastPromptAt < 120000) return;
-    lastPromptKey = key;
-    lastPromptAt = now;
-    showForm(true);
-  }
-
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message?.type === "GET_JOB_INFO") sendResponse(extractJob());
-    if (message?.type === "OPEN_JOB_TRACKER") showForm(false);
+    if (message?.type === "OPEN_JOB_TRACKER") showForm();
   });
-
-  let timer;
-  const observer = new MutationObserver(() => {
-    clearTimeout(timer);
-    timer = setTimeout(detectSuccess, 700);
-  });
-  if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-  setTimeout(detectSuccess, 1200);
 })();

@@ -3,10 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="author" content="zoepan0109-coder">
+  <meta name="project-signature" content="JAT-ZP-2026">
   <title>秋招投递助手</title>
   <link rel="stylesheet" href="popup.css">
 </head>
-<body>
+<body data-project-signature="JAT-ZP-2026">
   <main>
     <header><div><h1>秋招投递助手</h1><p id="source">正在读取当前页面…</p></div><span id="count">0 条</span></header>
     <label>公司名称<input id="company"></label>
@@ -16,17 +18,25 @@
       <label>当前流程<select id="status"></select></label>
     </div>
     <div class="grid">
-      <label>岗位方向<select id="direction"></select></label>
+      <label>岗位方向
+        <input id="direction" list="directionOptions" placeholder="可直接输入自定义方向">
+        <datalist id="directionOptions"></datalist>
+      </label>
       <label>优先级<select id="priority"><option>高</option><option selected>中</option><option>低</option></select></label>
     </div>
     <div class="grid">
       <label>投递日期<input type="date" id="appliedDate"></label>
       <label>下次跟进<input type="date" id="nextDate"></label>
     </div>
+    <div class="grid">
+      <label>投递简历版本<input id="resumeVersion" placeholder="例如：海外销售版 v3"></label>
+      <label>笔试/测评状态<select id="assessmentStatus"></select></label>
+    </div>
     <label>下一步安排<input id="nextAction" value="跟进投递结果"></label>
     <label>职位描述与要求<textarea id="notes" rows="4" placeholder="自动提取职位描述和任职要求"></textarea></label>
     <div class="actions"><button id="records" class="secondary">管理记录</button><button id="save">保存投递</button></div>
     <p id="message"></p>
+    <footer><a href="https://github.com/zoepan0109-coder/job-application-tracker-extension" target="_blank" rel="noreferrer">JAT · zoepan0109-coder</a></footer>
   </main>
   <script src="popup.js"></script>
 </body>
