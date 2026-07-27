@@ -1,0 +1,7 @@
+interface:
+  display_name: "秋招投递助手"
+  short_description: "安全安装、更新、检查并使用本地求职投递记录扩展"
+  default_prompt: "Use $job-application-tracker to safely install or update the 秋招投递助手 browser extension."
+
+policy:
+  allow_implicit_invocation: true

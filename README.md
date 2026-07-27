@@ -11,6 +11,27 @@
 
 当前版本：`0.5.0`
 
+## 让 AI 帮你安装（Codex Skill）
+
+本仓库同时提供配套的 `job-application-tracker` Skill。安装后，可以让 Codex 协助下载、检查隐私、更新扩展、排查岗位信息识别问题，并指导你在 Chrome 或 Edge 中加载。
+
+第一次使用时，把下面这句话发给 Codex：
+
+> 请从 https://github.com/zoepan0109-coder/job-application-tracker-extension/tree/main/skills/job-application-tracker 安装 `job-application-tracker` Skill，然后用它帮我安装秋招投递助手。
+
+也可以直接说：
+
+> 请安装 GitHub 仓库 `zoepan0109-coder/job-application-tracker-extension` 中 `skills/job-application-tracker` 路径下的 Skill。
+
+安装后，可以这样使用：
+
+- “用 `$job-application-tracker` 帮我安装秋招投递助手。”
+- “用 `$job-application-tracker` 检查最新版有没有 API Key 或个人信息泄露。”
+- “用 `$job-application-tracker` 更新插件，但先备份我的投递记录。”
+- “用 `$job-application-tracker` 修复这个公司官网岗位识别不完整的问题。”
+
+> 注意：Skill 可以协助完成下载、检查和导航，但 Chrome/Edge 出于安全考虑，仍会要求你亲自点击“加载已解压的扩展程序”并确认目录。公开 GitHub 仓库也不会自动进入所有 AI 的内置搜索目录；用户提供上面的仓库链接，是目前最可靠的安装方式。
+
 ## 支持的网站
 
 - Boss直聘
